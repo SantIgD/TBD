@@ -1,0 +1,7 @@
+Observaciones:
+
+	.En limítrofe no hace falta tener 2 veces el nombre de la población
+	.Es_Un creo que está bien, habría que consultarlo porque igual me suena raro 
+	.Visita no tenía como key la fecha y hora
+	.Los puse como args separados por como lo tenemos en el dia
+	
