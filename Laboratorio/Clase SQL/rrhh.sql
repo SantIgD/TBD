@@ -1,3 +1,4 @@
+/* Se carga con "source rrhh.sql"*/
 /* Ejercicio 1*/
 
 CREATE DATABASE IF NOT EXISTS RecursosHumanos;
@@ -32,11 +33,63 @@ CREATE TABLE Realiza (
 
 
 /* Ejercicio 2 */
-
 ALTER TABLE Empleado
 ADD ingreso DATE, 
 MODIFY nombre VARCHAR(30) NOT NULL;
 
 /* Ejercicio 3 */
-
 CREATE INDEX apellido_idx ON Empleado(apellido);
+
+/* Ejercicio 4 */
+INSERT INTO Empleado (nombre, apellido, id, ingreso) VALUES ('Clara', 'Toledo', DEFAULT, '1998-03-02');
+INSERT INTO Empleado (nombre, apellido, id, ingreso) VALUES ('Roberto', 'Ocampo', DEFAULT, '2002-10-07');
+INSERT INTO Empleado VALUES (DEFAULT, 'Jose', 'Ruiz', '2007-08-06');
+INSERT INTO Empleado VALUES (DEFAULT, 'Ana', 'Moretti', '2020-03-02');
+
+INSERT INTO Curso VALUES ('S-123-1', 'Prevención COVID' , DEFAULT);
+INSERT INTO Curso VALUES ('S-100-3', 'Primeros Auxilios', DEFAULT);
+INSERT INTO Curso VALUES ('M-150-2', 'Marketing Digital', 'externo');
+
+INSERT INTO Realiza VALUES ((SELECT id FROM Empleado WHERE nombre = 'Clara' AND apellido = 'Toledo'),
+                            'S-123-1');
+INSERT INTO Realiza VALUES ((SELECT id FROM Empleado WHERE nombre = 'Clara' AND apellido = 'Toledo'),
+                            'S-100-3');                            
+INSERT INTO Realiza VALUES ((SELECT id FROM Empleado WHERE nombre = 'Clara' AND apellido = 'Toledo'),
+                            'M-150-2');
+
+
+INSERT INTO Realiza VALUES ((SELECT id FROM Empleado WHERE nombre = 'Roberto' AND apellido = 'Ocampo'),
+                            'S-100-3');
+
+INSERT INTO Realiza VALUES ((SELECT id FROM Empleado WHERE nombre = 'Jose' AND apellido = 'Ruiz'),
+                            'S-123-1');
+INSERT INTO Realiza VALUES ((SELECT id FROM Empleado WHERE nombre = 'Jose' AND apellido = 'Ruiz'),
+                            'S-100-3');
+
+INSERT INTO Realiza VALUES ((SELECT id FROM Empleado WHERE nombre = 'Ana' AND apellido = 'Moretti'),
+                            'S-123-1');
+
+
+/* Ejercicio 5 */
+DELETE FROM Empleado
+    WHERE apellido = 'Ocampo' AND nombre = 'Roberto';
+
+UPDATE Empleado
+    SET nombre = 'Ana Emilia'
+        WHERE nombre = 'Ana' AND apellido = 'Moretti';
+
+/* Ejercicio 6 */
+SELECT nombre, apellido FROM Empleado
+    WHERE ingreso < '2015-01-01';
+
+/* Ejercicio 7 */
+SELECT nombre, apellido FROM Empleado
+    WHERE id IN (SELECT id FROM Realiza WHERE código = 'S-123-1');
+
+/* Ejercicio 8 */
+SELECT  nombre, apellido 
+FROM Empleado
+WHERE id IN (SELECT id 
+             FROM Realiza
+             GROUP BY id HAVING COUNT(*) = (SELECT COUNT(*)
+                                            FROM Curso));
